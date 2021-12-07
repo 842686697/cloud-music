@@ -1,19 +1,11 @@
-# cloud-music
+# 仿网易云web网站
 
-## Project setup
-```
-npm install
-```
+### 简介
 
-### Compiles and hot-reloads for development
-```
-npm run serve
-```
+>该项目是模仿网易云web网站以练习前端和后台的练手项目
 
-### Compiles and minifies for production
-```
-npm run build
-```
+### API
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+>感谢大佬提供的网易云Api—[NeteaseCloudMusicApi](https://github.com/Binaryify/NeteaseCloudMusicApi)
+
+
