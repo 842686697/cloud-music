@@ -6,6 +6,20 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "1308258",
+      "name": "113方向_向右",
+      "font_class": "113fangxiang_xiangyou",
+      "unicode": "e631",
+      "unicode_decimal": 58929
+    },
+    {
+      "icon_id": "1308261",
+      "name": "115方向_向左",
+      "font_class": "115fangxiang_xiangzuo",
+      "unicode": "e632",
+      "unicode_decimal": 58930
+    },
+    {
       "icon_id": "16648564",
       "name": "搜索",
       "font_class": "sousuo",

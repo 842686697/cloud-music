@@ -33,9 +33,9 @@
           </div>
         </div>
       </header>
-      <mian>
+      <main>
           <router-view/>
-      </mian>
+      </main>
       <footer class="footer">
 
       </footer>
@@ -51,13 +51,15 @@
       }
     },
       methods:{
+        //点击路由改变顶层header的样式
         changeClass(to){
-            this.router=to
+            this.router=to.matched[0].name
         }
       },
       watch:{
+        //监听路由
           $route(to,from){
-              this.changeClass(to.name);
+              this.changeClass(to);
           }
       },
       created() {

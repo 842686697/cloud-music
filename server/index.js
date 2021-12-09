@@ -1,29 +1,24 @@
 const express = require('express')
 const app = express()
 const port = 3000
+const home=require('./router/Home')
 
-const { login_cellphone, user_cloud } = require('NeteaseCloudMusicApi');
-async function main() {
-    try {
-        const result = await login_cellphone({
-            phone: '13330221130',
-            password: 'px13330221130',
-        })
-        console.log(result)
-        const result2 = await user_cloud({
-            cookie: result.body.cookie, // 凭证
-        })
-        console.log(result2.body)
-    } catch (error) {
-        console.log(error)
-    }
-}
-main()
-
+app.use((req, res, next) => {
+    //设置请求头
+    res.set({
+        'Access-Control-Allow-Credentials': true,
+        'Access-Control-Max-Age': 1728000,
+        'Access-Control-Allow-Origin': req.headers.origin || '*',
+        'Access-Control-Allow-Headers': 'X-Requested-With,Content-Type',
+        'Access-Control-Allow-Methods': 'PUT,POST,GET,DELETE,OPTIONS',
+        'Content-Type': 'application/json; charset=utf-8'
+    })
+    req.method === 'OPTIONS' ? res.status(204).end() : next()
+})
 app.get('/', (req, res) => {
     res.send('Hello World!')
 })
-
+app.use('/home',home);
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
 })
