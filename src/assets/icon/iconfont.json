@@ -6,6 +6,27 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "14095307",
+      "name": "文件夹",
+      "font_class": "wenjianjia",
+      "unicode": "e78c",
+      "unicode_decimal": 59276
+    },
+    {
+      "icon_id": "1258",
+      "name": "耳机",
+      "font_class": "erji",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    },
+    {
+      "icon_id": "5961323",
+      "name": "运行",
+      "font_class": "yunhang",
+      "unicode": "ec61",
+      "unicode_decimal": 60513
+    },
+    {
       "icon_id": "1308258",
       "name": "113方向_向右",
       "font_class": "113fangxiang_xiangyou",

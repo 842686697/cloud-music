@@ -72,7 +72,7 @@
 </script>
 <style scoped>
 #app {
-  width: 1536px;
+  width: 1519px;
   color: #2c3e50;
 }
 ._none{
@@ -88,7 +88,7 @@
 .header{
   display: flex;
   justify-content: center;
-  width: 1536px;
+  width: 1519px;
   height: 60px;
   background: #242424;
 }
