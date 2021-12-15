@@ -585,7 +585,7 @@
 
       $('#tabs li').click(function (e) {
         var tabContent = $('.tab-container .content')
-        var index = $(this).index()
+        var index = $(this).song()
 
         if ($(this).hasClass('active')) {
           return

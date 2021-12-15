@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+      <Audio></Audio>
     <header class="header">
       <div class="header_box">
           <el-row  class="header_left">
@@ -42,9 +43,11 @@
   </div>
 </template>
 <script>
+    import Audio from "./components/Audio";
   export default {
     name: "App",
-    data(){
+      components: {Audio},
+      data(){
       return {
         router: 'Home',
         input:''
@@ -63,7 +66,6 @@
           }
       },
       created() {
-
       },
       mounted(){
         console.log(this.$route);
@@ -71,125 +73,126 @@
   }
 </script>
 <style scoped>
-#app {
-  width: 1519px;
-  color: #2c3e50;
-}
-._none{
-    display: none;
-}
-.home{
+    #app {
+      width: 1519px;
+      color: #2c3e50;
+    }
+    ._none{
+        display: none;
+    }
+    .home{
 
-}
-.home_text{
-    font-size: 20px;
-    color: #dddddd;
-}
-.header{
-  display: flex;
-  justify-content: center;
-  width: 1519px;
-  height: 60px;
-  background: #242424;
-}
-.header_box{
-  display: inline-block;
-  width: 1100px;
-}
-.header_left{
-  float: left;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-left:20px;
-  width: 50%;
-  height: 100%;
-}
-.header_right{
-  float:right;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 40%;
-  height: 100%;
-}
-.button_creater{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100px;
-  height: 30px;
-  border: 1px #585858 solid;
-  color: white;
-  font-size: 12px;
-  background-color: black;
-}
-.button_login{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 60px;
-  height: 30px;
-  color: gray;
-  font-size: 12px;
-}
-.input_box{
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 30px;
-  margin-right:20px ;
-  padding-left: 5px;
-  background: white;
-  border-radius: 20px;
-}
-.input{
-  width: 120px;
-  height: 25px;
-  border-radius: 20px;
-  outline: none;
-  border: none;
-  color: gray;
-  font-size: 12px;
-}
-.input:focus{
-  color: black;
-}
-.square{
-    position: absolute;
-    left: 50%;
-    top: 53px;
-    width: 0;
-    height: 0;
-    margin-left: -6px;
-    border-bottom: 6px solid #c20c0c;
-    border-left: 6px solid transparent;
-    border-right: 6px solid transparent;
-}
-.col{
-    position: relative;
-    height: 100%;
-}
-.text{
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    color: lightgray;
-    font-size: 14px;
-}
-.text_clicked{
-    background-color: #000001;
-    color: white;
-}
-.text:hover{
-    background-color: #000001;
-    color: white;
-}
-.footer{
-    width: 100%;
-    height: 250px;
-    border-top: 1px #a8a8a8 solid;
-    background-color: lightgray;
-}
+    }
+    .home_text{
+        font-size: 20px;
+        color: #dddddd;
+    }
+    .header{
+      display: flex;
+      justify-content: center;
+      width: 1519px;
+      height: 60px;
+      background: #242424;
+    }
+    .header_box{
+      display: inline-block;
+      width: 1100px;
+    }
+    .header_left{
+      float: left;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding-left:20px;
+      width: 50%;
+      height: 100%;
+    }
+    .header_right{
+      float:right;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 40%;
+      height: 100%;
+    }
+    .button_creater{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100px;
+      height: 30px;
+      border: 1px #585858 solid;
+      color: white;
+      font-size: 12px;
+      background-color: black;
+    }
+    .button_login{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 60px;
+      height: 30px;
+      color: gray;
+      font-size: 12px;
+    }
+    .input_box{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 30px;
+      margin-right:20px ;
+      padding-left: 5px;
+      background: white;
+      border-radius: 20px;
+    }
+    .input{
+      width: 120px;
+      height: 25px;
+      border-radius: 20px;
+      outline: none;
+      border: none;
+      color: gray;
+      font-size: 12px;
+    }
+    .input:focus{
+      color: black;
+    }
+    .square{
+        position: absolute;
+        left: 50%;
+        top: 53px;
+        width: 0;
+        height: 0;
+        margin-left: -6px;
+        border-bottom: 6px solid #c20c0c;
+        border-left: 6px solid transparent;
+        border-right: 6px solid transparent;
+    }
+    .col{
+        position: relative;
+        height: 100%;
+    }
+    .text{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100%;
+        color: lightgray;
+        font-size: 14px;
+    }
+    .text_clicked{
+        background-color: #000001;
+        color: white;
+    }
+    .text:hover{
+        background-color: #000001;
+        color: white;
+    }
+    .footer{
+        width: 100%;
+        height: 250px;
+        border-top: 1px #a8a8a8 solid;
+        background-color: lightgray;
+    }
+
 </style>

@@ -143,7 +143,7 @@
                                 <div class="toplist_lists">
                                     <div class="toplist_song" :class="{'toplist_song_back':!(index%2>0)}" v-for="(item,index) in topListLeft" :key="index">
                                         <div class="toplist_song_index" :class="{'_red':index<3}">{{index+1}}</div>
-                                        <div class="toplist_song_name">{{item.name}}</div>
+                                        <div class="toplist_song_name" :id="item.id" @click="toSong($event)">{{item.name}}</div>
                                     </div>
                                     <div class="toplist_song_bottom">查看全部></div>
                                 </div>
@@ -203,7 +203,7 @@
                             <div class="artist_info_box" v-for="(item,index) in topArtists">
                                 <img :src="item.img1v1Url" height="62" width="62"/>
                                 <div class="artist_info">
-                                    <div class="artist_info_top">{{item.name}}</div>
+                                    <div class="artist_info_top" :id="item.id">{{item.name}}</div>
                                     <div class="artist_info_bottom">{{item.alias[0]}}</div>
                                 </div>
                             </div>
@@ -316,6 +316,12 @@
                     this.topArtists=res.data.artists;
                 })
             },
+            toSong(e){
+                const id=e.currentTarget.id;
+                this.$router.push({name:'Song',params:{
+                    id:id
+                }})
+            },
             test(){
                 axios.get(this.common.defaultUrl+'test').then(res=>{
                     console.log('test:',res.data)
@@ -326,12 +332,11 @@
 </script>
 
 <style scoped>
-
     .swiper_backbox{
         position: relative;
         display: flex;
         justify-content: center;
-        width: 100%;
+        width:1519px;
         height: 283px;
         overflow: hidden;
         font-size: 12px;
@@ -429,6 +434,7 @@
     .main_box{
         display: flex;
         width:982px;
+        height: 1380px;
         background-color: white;
         border-left: 1px #c2c2c2 solid;
         border-right: 1px #c2c2c2 solid;

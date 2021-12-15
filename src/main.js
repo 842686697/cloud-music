@@ -8,7 +8,7 @@ import '../public/css/global.css'
 import './assets/icon/iconfont.css'
 import axios from 'axios'
 import common from '../public/util/common'
-
+//请求前缀
 Vue.prototype.common=common;
 Vue.use(axios)
 Vue.use(ElementUI)

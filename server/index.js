@@ -21,7 +21,7 @@ app.get('/', (req, res) => {
     res.send('Hello World!')
 })
 app.use('/home',home);
-app.use('/',song);
+app.use('/song',song);
 app.use('/test',test);
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
