@@ -20,6 +20,9 @@
     cd music-cloud
     npm run serve
     
+    如果clone报错,就输入
+    git init
+    git config http.sslVerify "false"
 
 ### API
 
