@@ -18,8 +18,8 @@
                         <img class="img" @click="toSong()" :src="getImg" width="34" height="34"  />
                         <div class="info_right">
                             <div class="info">
-                                <div class="info_name" @click="toSong()">{{this.$store.state.songList.length!=0?this.$store.state.songList[this.$store.state.nowSong].detail.name:''}}</div>
-                                <div class="info_artist">{{this.$store.state.songList.length!=0?this.$store.state.songList[this.$store.state.nowSong].detail.ar[0].name:''}}</div>
+                                <div class="info_name" @click="toSong()">{{this.$store.state.songList.length!=0?this.$store.state.songList[this.$store.state.nowSong].name:''}}</div>
+                                <div class="info_artist">{{this.$store.state.songList.length!=0?this.$store.state.songList[this.$store.state.nowSong].ar[0].name:''}}</div>
                             </div>
                             <div class="progress" >
                                 <div class="ready" :style="{'width':ready}"></div>
@@ -64,11 +64,11 @@
                                 </div>
                                 <div class="list_bottom">
                                     <div class="list_bottom_left">
-                                        <div class="song_box" @click="selectSong(index)" :class="isNow(index)" v-for="(item,index) in list" :key="index" >
-                                            <div class="list_playicon"></div>
-                                            <div class="list_song_name">{{item.detail.name}}</div>
+                                        <div class="song_box" @click="selectSong(item.id)" :class="{'song_box_play':isNow(index)}" v-for="(item,index) in list" :key="index" >
+                                            <div class="list_playicon" :class="{'list_playicon_play':isNow(index)}"></div>
+                                            <div class="list_song_name">{{item.name}}</div>
                                             <div @click="clearSong($event)" :index="index" class="clear"></div>
-                                            <div class="list_song_ar">{{item.detail.ar[0].name}}</div>
+                                            <div class="list_song_ar">{{item.ar[0].name}}</div>
                                             <div class="list_song"></div>
                                         </div>
                                     </div>
@@ -108,17 +108,12 @@
         },
         methods:{
             //在列表中选择歌曲
-            selectSong(index){
-                this.$store.commit('selectSong',index)
+            selectSong(id){
+                this.$store.commit('selectSong',id)
             },
             //列表中此歌曲是否是正在听的歌曲
             isNow(index){
-                if(index == this.$store.state.nowSong){
-                    return 'song_box_play'
-                }
-                else{
-                    return ''
-                }
+                return index == this.$store.state.nowSong;
             },
             clearList(){
                 this.$store.commit('clearList');
@@ -159,13 +154,16 @@
                     this.status=false;
                 }
             },
+            getNowIndex(){
+                return this.$store.state.nowSong;
+            },
             //获取当前播放歌曲的id
             getNowId(){
                 return this.$store.getters.getNowId;
             },
             //更新当前歌曲的src到audio上
             updateSrc(){
-                let id=this.$store.state.songList[this.$store.state.nowSong].detail.id;
+                let id=this.$store.state.songList[this.$store.state.nowSong].id;
                 this.audio.src=`https://music.163.com/song/media/outer/url?id=${id}.mp3`;
                 this.status=true;
             },
@@ -230,7 +228,7 @@
         },
         computed:{
             getImg(){
-                return this.$store.state.songList.length!=0?this.$store.state.songList[this.$store.state.nowSong].detail.al.picUrl:this.defaultUrl
+                return this.$store.state.songList.length!=0?this.$store.state.songList[this.$store.state.nowSong].al.picUrl:this.defaultUrl
             },
             getListAmount(){
                 return this.$store.state.songList.length
@@ -519,11 +517,11 @@
     }
     .list{
         display: flex;
+        justify-content: center;
         align-items: center;
         position: relative;
-        width: 38px;
+        width: 60px;
         height: 25px;
-        padding-left: 21px;
         background:url("../../public/img/playbar.png") -42px -68px;
     }
     .list:hover{
@@ -598,6 +596,7 @@
         width: 100%;
     }
     .list_bottom_left{
+        overflow: auto;
         height: 100%;
         width: 553px;
         border-right:5px solid black;
@@ -619,13 +618,16 @@
     }
     .song_box:hover .clear{
         visibility: visible;
-
     }
     .list_playicon{
+        visibility: hidden;
         width: 13px;
         height: 13px;
         background: url("../../public/img/playlist.png") -182px 0;
         margin: 0 8px 0 10px;
+    }
+    .list_playicon_play{
+        visibility: visible;
     }
     .list_song_name{
         font-size: 12px;

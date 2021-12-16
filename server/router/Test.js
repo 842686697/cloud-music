@@ -1,6 +1,6 @@
 const express=require('express');
 const router=express.Router();
-const {song_url} = require('NeteaseCloudMusicApi')
+const {playlist_track_all} = require('NeteaseCloudMusicApi')
 
 router.use(function (res,req,next) {
     next()
@@ -12,8 +12,8 @@ router.get('/',(req,res)=>{
 })
 async function main() {
     try {
-        const result2 = await song_url({
-            id:1899450446
+        const result2 = await playlist_track_all({
+            id:7020312267
         })
         return result2.body
 

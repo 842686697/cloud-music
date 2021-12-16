@@ -7,6 +7,7 @@ import Download from "../views/Download";
 import Recommend from "../views/Home/children/Recommend";
 import Rank from "../views/Home/children/Rank";
 import Song from "../components/Song";
+import Playlist from "../components/Playlist";
 
 Vue.use(VueRouter)
 
@@ -21,6 +22,11 @@ const routes = [
         path:'/song/:id',
         name:'Song',
         component:Song
+      },
+      {
+        path:'/playlist/:id',
+        name:'Playlist',
+        component:Playlist
       },
       {
         path:'/recommend',

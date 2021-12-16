@@ -42,7 +42,7 @@
                         </div>
                         <div class="hot_box">
                             <div class="hot_playlist" v-for="(item,index) in hotList" :key="index">
-                                <div class="playlist_img">
+                                <div class="playlist_img" @click="toPlaylist(item.id)">
                                     <img :src="item.coverImgUrl" height="140px" width="140px" />
                                     <div class="playlist_img_icon">
                                         <i class="iconfont icon-erji"></i>
@@ -50,7 +50,7 @@
                                         <i class="iconfont icon-yunhang"></i>
                                     </div>
                                 </div>
-                                <div class="playlist_title">{{item.name}}</div>
+                                <div class="playlist_title" @click="toPlaylist(item.id)">{{item.name}}</div>
                             </div>
                         </div>
                     </div>
@@ -162,7 +162,7 @@
                                 <div class="toplist_lists">
                                     <div class="toplist_song" :class="{'toplist_song_back':!(index%2>0)}" v-for="(item,index) in topListCenter" :key="index">
                                         <div class="toplist_song_index" :class="{'_red':index<3}">{{index+1}}</div>
-                                        <div class="toplist_song_name">{{item.name}}</div>
+                                        <div class="toplist_song_name" :id="item.id" @click="toSong($event)">{{item.name}}</div>
                                     </div>
                                     <div class="toplist_song_bottom">查看全部></div>
                                 </div>
@@ -181,7 +181,7 @@
                                 <div class="toplist_lists">
                                     <div class="toplist_song" :class="{'toplist_song_back':!(index%2>0)}" v-for="(item,index) in topListRight" :key="index">
                                         <div class="toplist_song_index" :class="{'_red':index<3}">{{index+1}}</div>
-                                        <div class="toplist_song_name">{{item.name}}</div>
+                                        <div class="toplist_song_name" :id="item.id" @click="toSong($event)">{{item.name}}</div>
                                     </div>
                                     <div class="toplist_song_bottom">查看全部></div>
                                 </div>
@@ -315,6 +315,11 @@
                     console.log('topArtists',res.data);
                     this.topArtists=res.data.artists;
                 })
+            },
+            toPlaylist(id){
+                this.$router.push({name:'Playlist',params:{
+                        id:id
+                    }})
             },
             toSong(e){
                 const id=e.currentTarget.id;
@@ -611,6 +616,9 @@
         left: 0;
         top: 0;
         height: 140px;
+    }
+    .playlist_img:hover{
+        cursor: pointer;
     }
     .playlist_title{
         box-sizing: border-box;

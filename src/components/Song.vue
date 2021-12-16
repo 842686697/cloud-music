@@ -110,7 +110,7 @@
             play(){
                 //构建歌曲
                 let song={}
-                song.detail=this.song;
+                song=this.song;
                 song.lyric=this.lyric;
                 this.$store.commit('playSong',song)
             },

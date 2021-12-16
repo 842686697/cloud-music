@@ -16,20 +16,45 @@ export default new Vuex.Store({
       return state.nowSong;
     },
     getNowId:state => {
-      let id=state.songList[state.nowSong].detail.id;
-      return id;
+      if(state.songList.length){
+        let id=state.songList[state.nowSong].id;
+        return id;
+      }
     }
   },
   mutations: {
     //添加一首歌曲
     playSong:(state,song) => {
-      state.songList.push(song);
-      state.nowSong=state.songList.length-1;
-      console.log('歌曲列表+1，歌单：',state.songList);
+      //判断是否重复
+      let bool=true;
+      for(let i=0;i<state.songList.length;i++){
+        if(state.songList[i].id==song.id){
+          state.nowSong=i;
+          bool=false;
+        }
+      }
+      if(bool){
+        state.songList.push(song);
+        state.nowSong=state.songList.length-1;
+        console.log('歌曲列表+1，歌单：',state.songList);
+      }else{
+        console.log('歌曲添加重复');
+      }
+    },
+    //添加列表
+    pushList:(state,songs)=>{
+      state.songList=[];
+      state.songList=state.songList.concat(songs);
+      console.log('添加进列表')
     },
     //选择歌曲
-    selectSong(state,index){
-      state.nowSong=index;
+    selectSong(state,id){
+      for(let i=0;i<state.songList.length;i++){
+        if(state.songList[i].id==id){
+          state.nowSong=i
+          break;
+        }
+      }
     },
     //清空歌单
     clearList:state => {
