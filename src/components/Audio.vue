@@ -6,6 +6,7 @@
             </div>
             <div class="audio_content">
                 <div class="content_warp">
+<!--                    控制按钮-->
                     <div class="audio_control">
                         <i @click="prevSong()" class="iconfont icon-shangyiqu control_left"></i>
                         <div>
@@ -14,6 +15,7 @@
                         </div>
                         <i @click="nextSong()" class="iconfont icon-xiayiqu control_right"></i>
                     </div>
+<!--                    名字、图片、进度条-->
                     <div class="audio_info">
                         <img class="img" @click="toSong()" :src="getImg" width="34" height="34"  />
                         <div class="info_right">
@@ -32,6 +34,7 @@
                         </div>
                         <div class="time">{{nowTime}}<span> / {{allTime}}</span></div>
                     </div>
+<!--                    音量、模式、列表-->
                     <div class="audio_function">
                         <div @click.self="changeSoundStatus()" class="sound">
                             <div v-if="sound_box" class="sound_box">
@@ -44,7 +47,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="mode"></div>
+                        <div :class="{'mode_1':getMode()==1,'mode_2':getMode()==2,'mode_3':getMode()==3}" @click="changeMode()"></div>
                         <div class="list" @click.self="listStatusChange()" >
                             <div class="list_amount" @click.self="listStatusChange()">
                                 {{getListAmount}}
@@ -102,11 +105,18 @@
                 sound_box:false,
                 //当前音量
                 soundCur:'50%',
-                listDisplay:false
-
+                listDisplay:false,
+                //模式
+                mode:1
             }
         },
         methods:{
+            getMode(){
+                return this.$store.state.mode;
+            },
+            changeMode(){
+                this.$store.commit('changeMode');
+            },
             //在列表中选择歌曲
             selectSong(id){
                 this.$store.commit('selectSong',id)
@@ -210,7 +220,7 @@
             //更新当前进度条
             updateCur(){
                 var value = Math.round((Math.floor(this.audio.currentTime) / Math.floor(this.audio.duration)) * 100, 0);
-                this.cur=value+'%'
+                this.cur=value+'%';
                 this.setNowTime();
             },
             //缓冲待完成..
@@ -218,12 +228,24 @@
                 // let buffLength=this.audio.buffered.end(0)-this.audio.buffered.start(0);
                 // var value = Math.round((Math.floor(buffLength) / Math.floor(this.audio.duration)) * 100, 0);
                 // this.ready=value+'%'
-
             },
             //歌曲结束换下一首
             songEnd(){
-                this.$store.commit('nextSong');
-                this.updateSrc();
+                if(this.getMode()===1){
+                    this.$store.commit('nextSong');
+                    this.updateSrc();
+                    console.log('列表循环')
+                }
+                else if(this.getMode()===2){
+                    this.$store.commit('random');
+                    this.updateSrc();
+                    console.log('随机播放')
+                }
+                else if(this.getMode()===3){
+                    this.updateSrc();
+                    console.log('单曲循环')
+                }
+
             }
         },
         computed:{
@@ -506,12 +528,30 @@
         height: 100%;
         width:10px;
     }
-    .mode{
+    .mode_1{
+        width: 25px;
+        height: 25px;
+        background:url("../../public/img/playbar.png") -3px -344px;
+    }
+    .mode_1:hover{
+        cursor: pointer;
+        background:url("../../public/img/playbar.png") -33px -344px;
+    }
+    .mode_2{
+        width: 25px;
+        height: 25px;
+        background:url("../../public/img/playbar.png") -66px -248px;
+    }
+    .mode_2:hover{
+        cursor: pointer;
+        background:url("../../public/img/playbar.png") -93px -248px;
+    }
+    .mode_3{
         width: 25px;
         height: 25px;
         background:url("../../public/img/playbar.png") -66px -344px;
     }
-    .mode:hover{
+    .mode_3:hover{
         cursor: pointer;
         background:url("../../public/img/playbar.png") -93px -344px;
     }

@@ -65,52 +65,52 @@
                                 <el-carousel-item v-for="(item,index) in newAlbum" :key="index">
                                     <div class="album_banner">
                                         <div class="album_box">
-                                            <div class="album_img_box">
+                                            <div class="album_img_box" @click="toAlbum(item[0].albumId)">
                                                 <img :src="item[0].coverUrl" width="100" height="100">
                                                 <div class="album_img_back"></div>
                                             </div>
                                             <div class="album_info_box">
-                                                <div class="album_info_name">{{item[0].albumName}}</div>
+                                                <div class="album_info_name" @click="toAlbum(item[0].albumId)">{{item[0].albumName}}</div>
                                                 <div class="album_info_artist">{{item[0].artistName}}</div>
                                             </div>
                                         </div>
                                         <div class="album_box">
-                                            <div class="album_img_box">
+                                            <div class="album_img_box" @click="toAlbum(item[1].albumId)">
                                                 <img :src="item[1].coverUrl" width="100" height="100">
                                                 <div class="album_img_back"></div>
                                             </div>
                                             <div class="album_info_box">
-                                                <div class="album_info_name">{{item[1].albumName}}</div>
+                                                <div class="album_info_name" @click="toAlbum(item[1].albumId)">{{item[1].albumName}}</div>
                                                 <div class="album_info_artist">{{item[1].artistName}}</div>
                                             </div>
                                         </div>
                                         <div class="album_box">
-                                            <div class="album_img_box">
+                                            <div class="album_img_box" @click="toAlbum(item[2].albumId)">
                                                 <img :src="item[2].coverUrl" width="100" height="100">
                                                 <div class="album_img_back"></div>
                                             </div>
                                             <div class="album_info_box">
-                                                <div class="album_info_name">{{item[2].albumName}}</div>
+                                                <div class="album_info_name" @click="toAlbum(item[2].albumId)">{{item[2].albumName}}</div>
                                                 <div class="album_info_artist">{{item[2].artistName}}</div>
                                             </div>
                                         </div>
                                         <div class="album_box">
-                                            <div class="album_img_box">
+                                            <div class="album_img_box" @click="toAlbum(item[3].albumId)">
                                                 <img :src="item[3].coverUrl" width="100" height="100">
                                                 <div class="album_img_back"></div>
                                             </div>
                                             <div class="album_info_box">
-                                                <div class="album_info_name">{{item[3].albumName}}</div>
+                                                <div class="album_info_name" @click="toAlbum(item[3].albumId)">{{item[3].albumName}}</div>
                                                 <div class="album_info_artist">{{item[3].artistName}}</div>
                                             </div>
                                         </div>
                                         <div class="album_box">
-                                            <div class="album_img_box">
+                                            <div class="album_img_box" @click="toAlbum(item[4].albumId)">
                                                 <img :src="item[4].coverUrl" width="100" height="100">
                                                 <div class="album_img_back"></div>
                                             </div>
                                             <div class="album_info_box">
-                                                <div class="album_info_name">{{item[4].albumName}}</div>
+                                                <div class="album_info_name" @click="toAlbum(item[4].albumId)">{{item[4].albumName}}</div>
                                                 <div class="album_info_artist">{{item[4].artistName}}</div>
                                             </div>
                                         </div>
@@ -241,12 +241,16 @@
             this.getTopListCenter();
             this.getTopListRight();
             this.getTopArtists();
-            this.test();
         },
         mounted() {
 
         },
         methods:{
+            toAlbum(id){
+                this.$router.push({name:'Album',params:{
+                    id:id
+                    }})
+            },
             //获取首页数据
             getBanner(){
                 axios.get(this.common.defaultUrl+'home/banner').then(res=>{
@@ -327,11 +331,6 @@
                     id:id
                 }})
             },
-            test(){
-                axios.get(this.common.defaultUrl+'test').then(res=>{
-                    console.log('test:',res.data)
-                })
-            }
         }
     }
 </script>

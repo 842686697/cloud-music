@@ -5,6 +5,7 @@ const home=require('./router/Home')
 const test=require('./router/Test')
 const song=require('./router/Song')
 const playlist=require('./router/Playlist')
+const album=require('./router/Album')
 //跨域
 app.use((req, res, next) => {
     //设置请求头
@@ -25,6 +26,7 @@ app.use('/home',home);
 app.use('/song',song);
 app.use('/test',test);
 app.use('/playlist',playlist);
+app.use('/album',album);
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
 })

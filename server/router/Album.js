@@ -6,14 +6,15 @@ router.use(function (res,req,next) {
     next()
 })
 router.get('/',(req,res)=>{
-    main().then(result=>{
+    let id=req.query.id;
+    getAlbumInfo(id).then(result=>{
         res.send(result)
     })
 })
-async function main() {
+async function getAlbumInfo(id) {
     try {
         const result2 = await album({
-            id:136630921
+            id:id
         })
         return result2.body
 

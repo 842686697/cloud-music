@@ -19,7 +19,7 @@
                         <div class="play_icon"></div>
                         <div class="play_text">播放</div>
                     </div>
-                    <div class="button_add">
+                    <div class="button_add" @click="add()">
                     </div>
                     <div class="button_collect"></div>
                     <div class="button_share"></div>
@@ -107,12 +107,19 @@
             lyricOpen(){
               this.isOpen=!this.isOpen;
             },
+            //添加并播放歌曲
             play(){
-                //构建歌曲
                 let song={}
                 song=this.song;
                 song.lyric=this.lyric;
                 this.$store.commit('playSong',song)
+            },
+            //添加歌曲
+            add(){
+                let song={}
+                song=this.song;
+                song.lyric=this.lyric;
+                this.$store.commit('pushSong',song)
             },
             test(){
                 axios.get(this.common.defaultUrl+'test').then(res=>{

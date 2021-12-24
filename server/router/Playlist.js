@@ -21,7 +21,8 @@ router.get('/all',(req,res)=>{
 async function getAll(id) {
     try {
         const result2 = await playlist_track_all({
-            id:id
+            id:id,
+            limit:100
         })
         return result2.body
 

@@ -1,49 +1,55 @@
 <template>
-    <div class="playlist">
+    <div class="album" :class="{'album_loading':songs.length===0}">
         <div class="song_left">
-            <div class="left_top">
-            <div class="song_left_img_box">
-                <img :src="playlist.coverImgUrl" class="song_left_img" width="208px" height="208px"/>
-            </div>
-            <div class="song_left_text">
-                <div class="song_left_title">
-                    <div class="song_left_type"></div>
-                    <div class="song_left_name">{{playlist.name}}</div>
+            <div class="info">
+                <div class="song_left_img_box">
+                    <img :src="album.picUrl?album.picUrl:''" class="song_left_img" width="177px" height="177px"/>
+                    <div class="song_left_img_back"></div>
                 </div>
-                <div class="song_left_info">
-                    <div class="song_left_artist">
-                        <el-skeleton-item v-if="!playlist.creator.avatarUrl"  variant="image"  style="width: 35px; height: 35px;" animated/>
-                        <img class="artist_img" :src="playlist.creator.avatarUrl" height="35px" width="35px"/>
-                        <a href="" class="artist_to">{{playlist.creator.nickname}}</a>
+                <div class="song_left_text">
+                    <div class="song_left_title">
+                        <div class="song_left_type"></div>
+                        <div class="song_left_name">{{album.name}}</div>
                     </div>
-                    <div class="song_left_album">{{transTime()}} 创建</div>
-                </div>
-                <div class="song_left_buttons">
-                    <div class="button_play" @click="playList()">
-                        <div class="play_icon"></div>
-                        <div class="play_text">播放</div>
+                    <div class="song_left_info">
+                        <div class="song_left_artist">
+                            <div>歌手：</div>
+                            <div v-for="(item,index) in album.artists">
+                                <a href="" class="artist_to">{{item.name}}</a><span v-if="index+1!==album.artists.length">&nbsp/&nbsp</span>
+                            </div>
+                        </div>
+                        <div class="publish">发行时间：{{getPublishTime()}}</div>
+                        <div class="publish">发行公司：{{album.company}}</div>
                     </div>
-                    <div class="button_add" @click="pushList()">
+                    <div class="song_left_buttons" @click="playSong()">
+                        <div class="button_play">
+                            <div class="play_icon"></div>
+                            <div class="play_text">播放</div>
+                        </div>
+                        <div class="button_add" >
+                        </div>
+                        <div class="button_collect"></div>
+                        <div class="button_share"></div>
+                        <div class="button_download"></div>
+                        <div class="button_comment"></div>
                     </div>
-                    <div class="button_collect"></div>
-                    <div class="button_share"></div>
-                    <div class="button_download"></div>
-                    <div class="button_comment"></div>
-                </div>
-                <div class="song_left_lyric">
-                    <div class="tag_box">
-                        <div class="tag_title">标签： </div>
-                        <div class="tag" v-for="(item,index) in playlist.tags">{{item}}</div>
-                    </div>
-                    <div class="lyric">介绍： {{playlist.description}}</div>
                 </div>
             </div>
+            <div class="introduce">
+                <div class="song_left_lyric" :class="{'song_left_lyric_open':isOpen}">
+                    <div class="description_title">专辑介绍：</div>
+                    <div class="description_text" v-for="(item,index) in getDescription()">{{item}}</div>
+                </div>
+                <div class="open_button_box">
+                    <div v-if="!isOpen" class="open_button" @click="lyricOpen()">展开↓</div>
+                    <div v-else class="open_button" @click="lyricOpen()">收起↑</div>
+                </div>
             </div>
             <div class="left_bottom">
                 <div class="playlist_header">
-                    <div class="playlist_header_name">播放列表</div>
+                    <div class="playlist_header_name">包含歌曲列表</div>
                     <div class="playlist_header_mount">{{songs.length}}首歌</div>
-                    <div class="playlist_header_played">播放： <span>{{playlist.playCount}}</span>次</div>
+
                 </div>
                 <div class="list_songs">
                     <div class="songs_sort">
@@ -51,16 +57,14 @@
                         <div class="sort_name">歌曲标题</div>
                         <div class="sort_time">时长</div>
                         <div class="sort_artist">歌手</div>
-                        <div class="sort_album">专辑</div>
                     </div>
                     <el-skeleton variant="p" style="width: 100%" :loading="!songs.length"  animated />
-                    <div  class="song" :class="{'playing_back':isNowPlaying(item.id)}" v-for="(item,index) in songs">
-                        <div class="song_index">{{index}}</div>
-                        <i class="iconfont icon-yunhang song_play" @click="playSong(item)" :class="{'song_playing':isNowPlaying(item.id)}"></i>
-                        <div class="song_name" @click="toSong(item.id)">{{item.name}}</div>
+                    <div  class="song" :class="{'song_last':index+1===songs.length}" v-for="(item,index) in songs">
+                        <div class="song_index">{{index+1}}</div>
+                        <i class="iconfont icon-yunhang song_play" @click="playSong()"></i>
+                        <div class="song_name">{{item.name}}</div>
                         <div class="song_time"></div>
                         <div class="song_artist">{{item.ar[0].name}}</div>
-                        <div class="song_album">{{item.al.name}}</div>
                     </div>
                 </div>
             </div>
@@ -72,140 +76,104 @@
 <script>
     import axios from 'axios'
     export default {
-        name: "Playlist",
+        name: "Album",
         data(){
             return{
                 id:Number,
-                playlist:{},
-                songs:[],
-                createTime:''
+                isOpen:false,
+                album:{},
+                songs:[]
             }
         },
         methods:{
             //播放已有歌曲
-            playSong(song){
-                this.$store.commit('playSong',song);
+            playSong(){
+                this.$alert('因为版权等原因，专辑内歌曲不能播放', '不能播放的歌曲', {
+                    confirmButtonText: '确定',
+                    callback: action => {
+                        this.$message({
+                            type: 'info',
+                            message: `action: ${ action }`
+                        });
+                    }
+                });
             },
-            //查看当前歌曲是否在播放
-            isNowPlaying(id){
-                let nowid=this.getNowId();
-                return nowid==id;
+            //转换发行时间
+            getPublishTime(){
+                let data=new Date(this.album.publishTime);
+                return data.toLocaleString()
+            },
+            lyricOpen(){
+                this.isOpen=!this.isOpen;
             },
             //获取现在播放歌曲的id
             getNowId(){
-              return this.$store.getters.getNowId;
+                return this.$store.getters.getNowId;
             },
-            //跳转歌曲页面
-            toSong(id){
-              this.$router.push({name:'Song',params:{
-                  id:id
-                  }})
-            },
-            //添加歌单进列表
-            playList(){
-                if(this.songs.length){
-                    this.$store.commit('playList',this.songs);
-                }
-            },
-            pushList(){
-                if(this.songs.length){
-                    this.$store.commit('pushList',this.songs);
-                }
-            },
-            //初始化歌单id
-            getInit(){
+            getId(){
                 this.id=this.$route.params.id;
             },
-            //获取歌单信息
-            getPlaylist(){
-                return new Promise((resolve,reject)=>{
-                    const id=this.id;
-                    axios.get(this.common.defaultUrl+'playlist/detail',{
-                        params:{
-                            id:id
-                        }
-                    }).then(res=>{
-                        this.playlist=res.data.playlist;
-                        console.log('playlist:',res.data)
-                        resolve()
-                    })
-                });
+            getDescription(){
+                return this.album.description.split('\n');
             },
-            //获取歌单所有歌曲
-            getAll(){
-                return new Promise((resolve,reject)=>{
-                    const id=this.id;
-                    axios.get(this.common.defaultUrl+'playlist/all',{
-                        params:{
-                            id:id
-                        }
-                    }).then(res=>{
-                        this.songs=res.data.songs;
-                        console.log('allsongs:',res.data)
-                        resolve()
-                    })
+            getAlbumInfo(){
+                axios.get(this.common.defaultUrl+'album',{
+                    params:{
+                        id:this.id
+                    }
+                }).then(res=>{
+                    console.log('album:',res.data);
+                    this.album=res.data.album;
+                    this.songs=res.data.songs;
                 })
             },
-            //转换时间格式
-            getTime(time){
-                var duration = parseInt(time);
-                var minute = parseInt(duration/60);
-                var sec = duration%60+'';
-                var isM0 = ':';
-                if(minute == 0){
-                    minute = '00';
-                }else if(minute < 10 ){
-                    minute = '0'+minute;
-                }
-                if(sec.length == 1){
-                    sec = '0'+sec;
-                }
-                return minute+isM0+sec
-            },
-            //转换歌曲时长
-            transSongTime(time){
-                return this.getTime(time);
-            },
-            //创建时间
-            transTime(){
-                let data=new Date(this.playlist.createTime);
-                return data.toLocaleString()
-            },
-            async getData(){
-                //先获取歌单详细，再获取所有歌曲
-                await this.getPlaylist();
-                await this.getAll();
-            },
+            test(){
+                axios.get(this.common.defaultUrl+'test').then(res=>{
+                    console.log('test:',res.data)
+                })
+            }
         },
         created() {
-            this.getInit();
-            this.getData();
-        },
-        mounted(){
+            this.getId();
+            // setTimeout(this.getAlbumInfo,3000)
+            this.getAlbumInfo();
         }
     }
 </script>
 
 <style scoped>
-    .playlist{
+    .album{
         width: 980px;
         border-left: 1px #c2c2c2 solid;
         border-right: 1px #c2c2c2 solid;
         background-color: white;
     }
-    .song_left{
-        padding: 35px;
+    .album_loading{
+        height: 500px;
     }
-    .left_top{
+    .song_left{
         display: flex;
+        flex-direction: column;
         width: 709px;
         box-sizing: border-box;
+        padding:45px 35px;
         border-right: 1px solid #dbdbdb;
     }
+    .info{
+        display: flex;
+        width: 709px;
+    }
     .song_left_img_box{
-        height: 211px;
-        padding: 2px;
-        border: 2px solid lightgray;
+        position: relative;
+        margin-right: 38px;
+    }
+    .song_left_img_back{
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 209px;
+        height: 177px;
+        background: url("../../public/img/coverall.png") 0 -986px;
     }
     .song_left_text{
         width: 100%;
@@ -214,12 +182,12 @@
     .song_left_title{
         display: flex;
         align-items: center;
-        margin-bottom: 10px;
+        margin-bottom: 15px;
     }
     .song_left_type{
         width: 54px;
         height: 24px;
-        background: url("../../public/img/icon.png") 0 -243px;
+        background: url("../../public/img/icon.png") 0 -186px;
     }
     .song_left_name{
         margin-left: 10px;
@@ -232,24 +200,15 @@
         text-decoration: underline;
     }
     .song_left_info{
-        display: flex;
-        align-items: center;
         font-size: 12px;
     }
     .song_left_artist{
         display: flex;
-        align-items: center;
-        color: #929292;
+        color: #666;
     }
-    .artist_img{
-
-    }
-    .artist_to{
-        margin-left: 10px;
-    }
-    .song_left_album{
-        margin-left: 20px;
-        color: #929292;
+    .publish{
+        margin-top: 5px;
+        color: #666;
     }
     .song_left_buttons{
         display: flex;
@@ -301,32 +260,39 @@
         background: url("../../public/img/button2.png") -80px -1588px;
     }
     .song_left_lyric{
-        margin-top: 20px;
+        height: 90px;
+        margin-top: 35px;
         font-size: 12px;
-    }
-    .song_left_lyric_open{
-        height: 290px;
         overflow: hidden;
     }
-    .tag_title{
+    .song_left_lyric_open{
+        height: auto;
+        overflow: hidden;
+    }
+    .description_title{
+        font-weight: bold;
+        color: black;
         font-size: 12px;
     }
-    .tag{
-        display: flex;
-        align-items: center;
-        height: 20px;
-        width: auto;
-        padding: 0 12px;
-        margin-left: 5px;
-        border-radius: 10px;
-        background-color: #ebebeb;
-        font-size: 12px;
-        color: #6d6d6d;
+    .description_text{
+        margin-top: 6px;
+        text-indent: 2em;
+        color: #666;
     }
-    .tag_box{
+    .open_button_box{
         display: flex;
-        align-items: center;
-        margin: 6px 0 10px 0;
+        justify-content: flex-end;
+        width: 100%;
+
+    }
+    .open_button{
+        margin-top: 10px;
+        font-size: 12px;
+        color:#0c73c2;;
+    }
+    .open_button:hover{
+        cursor: pointer;
+        text-decoration: underline;
     }
     .left_bottom{
     }
@@ -345,14 +311,7 @@
         font-size: 12px;
         margin-right: 385px;
     }
-    .playlist_header_played{
 
-        font-size: 12px;
-    }
-    .playlist_header_played span{
-        font-weight: bold;
-        color: #bf0000;
-    }
     .list_songs{
         width: 638px;
         border-right: 1px solid lightgray;
@@ -382,7 +341,7 @@
     .sort_name{
         display: flex;
         align-items: center;
-        width: 236px;
+        width: 346px;
         height: 100%;
         padding-left: 10px;
         box-sizing: border-box;
@@ -392,7 +351,7 @@
     .sort_time{
         display: flex;
         align-items: center;
-        width: 111px;
+        width: 91px;
         height: 100%;
         padding-left: 10px;
         box-sizing: border-box;
@@ -402,7 +361,7 @@
     .sort_artist{
         display: flex;
         align-items: center;
-        width: 90px;
+        width: 128px;
         height: 100%;
         padding-left: 10px;
         box-sizing: border-box;
@@ -418,7 +377,7 @@
         box-sizing: border-box;
         border-right: 1px solid lightgray;
         background: url("../../public/img/table.png");
-     }
+    }
     .song{
         position: relative;
         display: flex;
@@ -426,6 +385,9 @@
         width: 638px;
         height: 30px;
         font-size: 12px;
+    }
+    .song_last{
+        border-bottom: 1px solid lightgray;
     }
     .playing_back{
         background-color: lightgray;
@@ -455,7 +417,7 @@
     }
     .song_name{
         padding: 6px 0 0 10px;
-        width: 236px;
+        width: 346px;
         height: 100%;
         box-sizing: border-box;
         overflow:hidden;
@@ -469,7 +431,7 @@
     .song_time{
         display: flex;
         align-items: center;
-        width: 111px;
+        width: 91px;
         height: 100%;
         padding-left: 10px;
         box-sizing: border-box;
@@ -477,7 +439,7 @@
     .song_artist{
         display: flex;
         align-items: center;
-        width: 90px;
+        width: 128px;
         height: 100%;
         padding-left: 10px;
         box-sizing: border-box;

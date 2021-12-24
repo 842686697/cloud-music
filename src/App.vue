@@ -37,16 +37,17 @@
       <main>
           <router-view/>
       </main>
-      <footer class="footer">
+      <Footer>
 
-      </footer>
+      </Footer>
   </div>
 </template>
 <script>
     import Audio from "./components/Audio";
+    import Footer from './views/Footer'
   export default {
     name: "App",
-      components: {Audio},
+      components: {Audio,Footer},
       data(){
       return {
         router: 'Home',
@@ -187,12 +188,6 @@
     .text:hover{
         background-color: #000001;
         color: white;
-    }
-    .footer{
-        width: 100%;
-        height: 250px;
-        border-top: 1px #a8a8a8 solid;
-        background-color: lightgray;
     }
 
 </style>
